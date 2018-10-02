@@ -1,51 +1,48 @@
 import React, { Component } from 'react';
 import axios from "axios";
-
 import { css } from "emotion";
+
 import CardGameContainer from './CardGameContainer';
 
 class App extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-        cards: [],
-        loading: false
-        };
-      }
+  state = {
+    cards: [],
+    loading: false
+  };
 
-      componentDidMount() {
-        this.gameSetup()
-      }
+  componentDidMount() {
+    this.gameSetup()
+  }
 
-      gameSetup = () => {
-        this.setState({
-          loading: true
+  gameSetup = () => {
+    this.setState({
+      loading: true
+    });
+    setTimeout(() => {
+      axios
+        .get(`https://deckofcardsapi.com/api/deck/new/draw/?count=52`)
+        .then(res => {
+          const cards = res.data.cards.map((card) => {
+            return {...card, flipped: false, matched: false };
+          });
+          this.setState({
+            cards,
+            loading: false
+          })
         });
-        setTimeout(() => {
-          axios
-            .get(`https://deckofcardsapi.com/api/deck/new/draw/?count=52`)
-            .then(res => {
-              const cards = res.data.cards.map((card) => {
-                  console.log(card)
-                return {...card, flipped: false, matched: false };
-              });
-              console.log(cards);
-              this.setState({
-                cards,
-                loading: false
-              })
-            });
-        }, 1000);
-      };
-    render() {
-        const {cards, loading} = this.state
-        if (loading) return<div className={`loader ${classNames.loaderDiv}`}></div>
-        return (
-            <CardGameContainer gameSetup={this.gameSetup} cards={cards}/>
-        );
-    }
-}
+    }, 1000);
+  };
 
+  render() {
+    const {cards, loading} = this.state
+    if (loading) {
+      return <div className={`loader ${classNames.loaderDiv}`}></div>;
+    }
+    return (
+      <CardGameContainer gameSetup={this.gameSetup} cards={cards}/>
+    );
+  }
+}
 
 const classNames = {
   loaderDiv: css`
@@ -54,4 +51,5 @@ const classNames = {
    margin: 0 auto
   `
 }
+
 export default App;

@@ -1,7 +1,7 @@
-import {render, Simulate, wait} from 'react-testing-library';
+import {render } from 'react-testing-library';
 import React from 'react';
 import 'jest-dom/extend-expect'
-import Card from './Card';
+import Card from '../components/Card';
 
 const value = 2
 const suit = "HEARTS"

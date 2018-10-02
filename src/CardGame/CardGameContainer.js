@@ -9,9 +9,14 @@ class CardGameContainer extends Component {
       cards: this.props.cards,
       firstCardFlipped: null,
       secondCardFlipped: null,
+      isGameOver: false
   }
 
-  //why did we pass a array 
+   isEveryCardMatched = () =>{
+     const { cards } = this.state 
+     return cards.every( ({matched}) =>  matched )
+  } 
+
   updateMatchStatus = flippedCards => {
     const cardOneValue = flippedCards[0].value;
     const cardTwoValue = flippedCards[1].value;
@@ -23,20 +28,17 @@ class CardGameContainer extends Component {
     
     if (cardOneValue === cardTwoValue) {
       firstCard = { ...firstCard, matched: true}
-      secondCard = { ...secondCard, matched: true}    
+      secondCard = { ...secondCard, matched: true}   
     }
     newCardList[cardOneIndex] = firstCard
     newCardList[cardTwoIndex] = secondCard
-    console.log("val ", cardOneValue, cardTwoValue, cardOneIndex, cardTwoIndex, newCardList, firstCard, secondCard)
     this.setState({
       cards: newCardList,
       firstCardFlipped: null,
       secondCardFlipped: null
     });
-
   };
   updateFlipCardStatus = id => {
-    console.log('clicked ', id)
     //update 
     //set state to an array to remember for first card to be selected for object properties
     if (
@@ -61,7 +63,6 @@ class CardGameContainer extends Component {
       this.state.cards[id].code !== this.state.firstCardFlipped.code &&
       this.state.secondCardFlipped === null
     ) {
-       console.log('hit')
         const secondCard =  {...this.state.cards[id], flipped: true}
         const newCardList =  this.state.cards.slice();
         newCardList[id] = secondCard
@@ -83,9 +84,11 @@ class CardGameContainer extends Component {
     }
   };
   render() {
+
     const { gameSetup } = this.props;
     const { cards } = this.state;
-    console.log('card state', cards)
+    const isGameOver = this.isEveryCardMatched();
+
     return (
       <div className={classNames.containerStyle}>
         <div className={classNames.divMarginSpacing}>
@@ -93,14 +96,14 @@ class CardGameContainer extends Component {
             onClick={
               gameSetup
             }
+            data-testid="New-Game"
           >
             New Game
           </button>
         </div>
         <div className={classNames.cardStyle}>
-          {
-            cards.map((singleCard, index) => {
-              return (
+          { isGameOver ? "Game Over": 
+            cards.map((singleCard, index) => (
                 <Card
                   id={index}
                   value={singleCard.value}
@@ -112,8 +115,8 @@ class CardGameContainer extends Component {
                   image={singleCard.image}
                   updateFlipCardStatus={this.updateFlipCardStatus}
                 />
-              );
-            })}
+              )
+          )} 
         </div>
       </div>
     );
