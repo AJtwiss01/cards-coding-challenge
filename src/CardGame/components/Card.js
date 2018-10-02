@@ -1,4 +1,5 @@
 import React from "react";
+import { css } from "emotion";
 
 const enhanceFunctionWithOnEnter = (cb) => (event) => {
    if(event.key === "Enter"){
@@ -6,26 +7,41 @@ const enhanceFunctionWithOnEnter = (cb) => (event) => {
    }
 }
 
-const Card = ({ id, type, value, suit, code, flipped, matched, image, updateFlipCardStatus }) => {
-  const handleFlippClick = event => {
+const getCardPositionAltText = (id) => {
+   const row = Math.floor(id / 13) + 1
+   const column = id % 13 + 1
+   return `This Card is located in column ${column} in row ${row}`
+}
+
+const Card = ({ id, value, suit, code, flipped, matched, image, updateFlipCardStatus }) => {
+  const handleFlipClick = event => {
     event.preventDefault();
     updateFlipCardStatus(id);
   };
+  
+  const positionAltText = getCardPositionAltText(id)
   return (
     <img
-      onKeyPress={enhanceFunctionWithOnEnter(handleFlippClick)}
-      alt={flipped ? `This card is the ${value} of ${suit}`:`Card to Flip`}
+      onKeyPress={enhanceFunctionWithOnEnter(handleFlipClick)}
+      alt={flipped ? `This card is the ${value} of ${suit}`: positionAltText}
       tabIndex="0"
       src={flipped ? image : "../assets/playing-card-back.png"}
       id={id}
       key={code}
-      type={type}
       data-testid={`Card-${value}-${suit}`}
-      onClick={handleFlippClick}
-      style={matched ? {visibility: "hidden"}:{cursor: 'pointer'}}
+      onClick={handleFlipClick}
+      className={matched ? classNames.isHidden:classNames.isShowing}
       width="86px"
     />
   );
 };
-
+const classNames = {
+  isHidden: css`
+    visibility: hidden;
+    cursor: none;
+  `,
+  isShowing: css`
+  cursor: pointer;
+  `
+}
 export default Card;
