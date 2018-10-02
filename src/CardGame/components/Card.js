@@ -20,6 +20,7 @@ const Card = ({ id, type, value, suit, code, flipped, matched, image, updateFlip
       id={id}
       key={code}
       type={type}
+      data-testid={`Card-${value}-${suit}`}
       onClick={handleFlippClick}
       style={matched ? {visibility: "hidden"}:{cursor: 'pointer'}}
       width="86px"

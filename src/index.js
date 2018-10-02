@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from "./ConcentrationGame/App";
-import "./ConcentrationGame/styles/loader.css";
+import App from "./CardGame/App";
+import "./CardGame/styles/loader.css";
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(<App />, document.getElementById('root'));

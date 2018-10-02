@@ -56,7 +56,6 @@ class CardGameContainer extends Component {
     }
 
     // if the is not the sanme as the first card clicked and there is a first card clicked and there is not second card clicked
-    // why if verse else if 
     if (
       this.state.firstCardFlipped !== null &&
       this.state.cards[id].code !== this.state.firstCardFlipped.code &&
@@ -71,7 +70,6 @@ class CardGameContainer extends Component {
           cards: newCardList,
           secondCardFlipped: {...secondCard, index:id}
         });
-       
       setTimeout(() => {
         if (
           this.state.firstCardFlipped !== null &&

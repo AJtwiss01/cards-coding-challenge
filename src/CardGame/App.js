@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import axios from "axios";
 
-import { cx,css } from "emotion";
+import { css } from "emotion";
 import CardGameContainer from './CardGameContainer';
 
 class App extends Component {
@@ -47,9 +46,6 @@ class App extends Component {
     }
 }
 
-App.propTypes = {
-
-};
 
 const classNames = {
   loaderDiv: css`
