@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import axios from "axios";
-import { css } from "emotion";
 
-import CardGameContainer from './CardGameContainer';
+import CardGameContainer from "./CardGameContainer";
+import Loader from "./components/Loader";
 
 class App extends Component {
   state = {
@@ -11,7 +11,7 @@ class App extends Component {
   };
 
   componentDidMount() {
-    this.gameSetup()
+    this.gameSetup();
   }
 
   gameSetup = () => {
@@ -22,34 +22,24 @@ class App extends Component {
       axios
         .get(`https://deckofcardsapi.com/api/deck/new/draw/?count=52`)
         .then(res => {
-          const cards = res.data.cards.map((card) => {
-            return {...card, flipped: false, matched: false };
+          const cards = res.data.cards.map(card => {
+            return { ...card, flipped: false, matched: false };
           });
           this.setState({
             cards,
             loading: false
-          })
+          });
         });
     }, 1000);
   };
 
   render() {
-    const {cards, loading} = this.state
+    const { cards, loading } = this.state;
     if (loading) {
-      return <div className={`loader ${classNames.loaderDiv}`}></div>;
+      return <Loader />;
     }
-    return (
-      <CardGameContainer gameSetup={this.gameSetup} cards={cards}/>
-    );
+    return <CardGameContainer gameSetup={this.gameSetup} cards={cards} />;
   }
-}
-
-const classNames = {
-  loaderDiv: css`
-   display: flex;
-   justify-content: center;;
-   margin: 0 auto
-  `
 }
 
 export default App;

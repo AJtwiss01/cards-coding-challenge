@@ -1,37 +1,36 @@
 import React, { Component } from "react";
 import { css } from "emotion";
 import Card from "./components/Card";
-
+import GameOver from "./components/GameOver";
 
 class CardGameContainer extends Component {
+  state = {
+    cards: this.props.cards,
+    firstCardFlipped: null,
+    secondCardFlipped: null,
+    isGameOver: false
+  };
 
-    state = {
-      cards: this.props.cards,
-      firstCardFlipped: null,
-      secondCardFlipped: null,
-      isGameOver: false
-  }
-
-   isEveryCardMatched = () =>{
-     const { cards } = this.state 
-     return cards.every( ({matched}) =>  matched )
-  } 
+  isEveryCardMatched = () => {
+    const { cards } = this.state;
+    return cards.every(({ matched }) => matched);
+  };
 
   updateMatchStatus = flippedCards => {
     const cardOneValue = flippedCards[0].value;
     const cardTwoValue = flippedCards[1].value;
     const cardOneIndex = flippedCards[0].index;
     const cardTwoIndex = flippedCards[1].index;
-    const newCardList =  this.state.cards.slice();
-    let firstCard = { ...newCardList[cardOneIndex], flipped: false  }
-    let secondCard = { ...newCardList[cardTwoIndex], flipped: false  }
-    
+    const newCardList = this.state.cards.slice();
+    let firstCard = { ...newCardList[cardOneIndex], flipped: false };
+    let secondCard = { ...newCardList[cardTwoIndex], flipped: false };
+
     if (cardOneValue === cardTwoValue) {
-      firstCard = { ...firstCard, matched: true}
-      secondCard = { ...secondCard, matched: true}   
+      firstCard = { ...firstCard, matched: true };
+      secondCard = { ...secondCard, matched: true };
     }
-    newCardList[cardOneIndex] = firstCard
-    newCardList[cardTwoIndex] = secondCard
+    newCardList[cardOneIndex] = firstCard;
+    newCardList[cardTwoIndex] = secondCard;
     this.setState({
       cards: newCardList,
       firstCardFlipped: null,
@@ -39,21 +38,21 @@ class CardGameContainer extends Component {
     });
   };
   updateFlipCardStatus = id => {
-    //update 
+    //update
     //set state to an array to remember for first card to be selected for object properties
     if (
-      // if there first card hasn't been flipped 
+      // if there first card hasn't been flipped
       this.state.firstCardFlipped === null
     ) {
-      //create a object so we wont mutate the state 
-      //flipped not going ot update in card list 
-      const firstCard =  {...this.state.cards[id], flipped: true}
-      const newCardList =  this.state.cards.slice();
-      newCardList[id] = firstCard
+      //create a object so we wont mutate the state
+      //flipped not going ot update in card list
+      const firstCard = { ...this.state.cards[id], flipped: true };
+      const newCardList = this.state.cards.slice();
+      newCardList[id] = firstCard;
 
       this.setState({
         cards: newCardList,
-        firstCardFlipped: {...firstCard, index:id}
+        firstCardFlipped: { ...firstCard, index: id }
       });
     }
 
@@ -63,28 +62,28 @@ class CardGameContainer extends Component {
       this.state.cards[id].code !== this.state.firstCardFlipped.code &&
       this.state.secondCardFlipped === null
     ) {
-        const secondCard =  {...this.state.cards[id], flipped: true}
-        const newCardList =  this.state.cards.slice();
-        newCardList[id] = secondCard
-  
-        this.setState({
-          cards: newCardList,
-          secondCardFlipped: {...secondCard, index:id}
-        });
+      const secondCard = { ...this.state.cards[id], flipped: true };
+      const newCardList = this.state.cards.slice();
+      newCardList[id] = secondCard;
+
+      this.setState({
+        cards: newCardList,
+        secondCardFlipped: { ...secondCard, index: id }
+      });
       setTimeout(() => {
         if (
           this.state.firstCardFlipped !== null &&
           this.state.secondCardFlipped !== null
         ) {
           this.updateMatchStatus([
-            this.state.firstCardFlipped, this.state.secondCardFlipped
+            this.state.firstCardFlipped,
+            this.state.secondCardFlipped
           ]);
         }
-      }, 1000);
+      }, 500);
     }
   };
   render() {
-
     const { gameSetup } = this.props;
     const { cards } = this.state;
     const isGameOver = this.isEveryCardMatched();
@@ -92,31 +91,28 @@ class CardGameContainer extends Component {
     return (
       <div className={classNames.containerStyle}>
         <div className={classNames.divMarginSpacing}>
-          <button
-            onClick={
-              gameSetup
-            }
-            data-testid="New-Game"
-          >
+          <button onClick={gameSetup} data-testid="New-Game">
             New Game
           </button>
         </div>
-        <div className={classNames.cardStyle}>
-          { isGameOver ? "Game Over": 
+        <div className={classNames.divWrapper}>
+          {isGameOver ? (
+            <GameOver />
+          ) : (
             cards.map((singleCard, index) => (
-                <Card
-                  id={index}
-                  value={singleCard.value}
-                  suit={singleCard.suit}
-                  type={singleCard.value}
-                  key={index}
-                  flipped={singleCard.flipped}
-                  matched={singleCard.matched}
-                  image={singleCard.image}
-                  updateFlipCardStatus={this.updateFlipCardStatus}
-                />
-              )
-          )} 
+              <Card
+                id={index}
+                value={singleCard.value}
+                suit={singleCard.suit}
+                type={singleCard.value}
+                key={index}
+                flipped={singleCard.flipped}
+                matched={singleCard.matched}
+                image={singleCard.image}
+                updateFlipCardStatus={this.updateFlipCardStatus}
+              />
+            ))
+          )}
         </div>
       </div>
     );
@@ -124,25 +120,23 @@ class CardGameContainer extends Component {
 }
 
 const classNames = {
-  cardStyle: css`
-   display: flex;
-   flex-wrap: wrap;
-   align-items: center;
-   height: 50px
-  `,
   containerStyle: css`
-  display: flex;
-  flex-direction: column;
-  width: 1140px;
-  margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    width: 1140px;
+    margin: 0 auto;
+  `,
+  divWrapper: css`
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    height: 100%;
+    margin: 0 auto;
   `,
   divMarginSpacing: css`
-  display: "flex";
-  margin: "1em 0"
+    display: flex;
+    margin: 1em 0;
   `
-}
-
-
-CardGameContainer.propTypes = {};
+};
 
 export default CardGameContainer;

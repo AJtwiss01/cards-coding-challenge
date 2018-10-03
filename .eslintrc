@@ -1,0 +1,9 @@
+{
+    "parser": "babel-eslint",
+    "extends": "airbnd",
+    "plugins": [
+        "react",
+        "jsx-a11y",
+        "import"
+    ]
+}
