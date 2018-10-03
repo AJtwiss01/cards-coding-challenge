@@ -1,9 +1,17 @@
 import React, { Component } from "react";
 import { css } from "emotion";
-import Card from "./components/Card";
-import GameOver from "./components/GameOver";
 
+import Card from "../Components/Card";
+import GameOver from "../Components/GameOver";
+import Button from "../Components/Button";
+/**
+ *
+ * This component receives a list of cards and handles the all state in the app.
+ * It also shapes and passes data to the card list and game functions.
+ *
+ */
 class CardGameContainer extends Component {
+  // initializing state - (we dont care about prop updates except on new game)
   state = {
     cards: this.props.cards,
     firstCardFlipped: null,
@@ -37,52 +45,49 @@ class CardGameContainer extends Component {
       secondCardFlipped: null
     });
   };
+
   updateFlipCardStatus = id => {
-    //update
-    //set state to an array to remember for first card to be selected for object properties
+    const { firstCardFlipped, secondCardFlipped, cards } = this.state;
     if (
-      // if there first card hasn't been flipped
-      this.state.firstCardFlipped === null
+      // if the first card hasn't been flipped
+      firstCardFlipped === null
     ) {
       //create a object so we wont mutate the state
-      //flipped not going ot update in card list
-      const firstCard = { ...this.state.cards[id], flipped: true };
-      const newCardList = this.state.cards.slice();
+      const firstCard = { ...cards[id], flipped: true };
+      const newCardList = cards.slice();
       newCardList[id] = firstCard;
 
       this.setState({
         cards: newCardList,
         firstCardFlipped: { ...firstCard, index: id }
       });
-    }
-
-    // if the is not the sanme as the first card clicked and there is a first card clicked and there is not second card clicked
-    if (
-      this.state.firstCardFlipped !== null &&
-      this.state.cards[id].code !== this.state.firstCardFlipped.code &&
-      this.state.secondCardFlipped === null
+    } else if (
+      firstCardFlipped !== null &&
+      cards[id].code !== firstCardFlipped.code &&
+      secondCardFlipped === null
     ) {
-      const secondCard = { ...this.state.cards[id], flipped: true };
-      const newCardList = this.state.cards.slice();
+      const secondCard = { ...cards[id], flipped: true };
+      const newCardList = cards.slice();
       newCardList[id] = secondCard;
 
       this.setState({
         cards: newCardList,
         secondCardFlipped: { ...secondCard, index: id }
       });
+      /**
+       *
+       * handling a way for cards not to automaticaly flip over when there is not a match
+       * could posibily have race conditions TD
+       */
       setTimeout(() => {
-        if (
-          this.state.firstCardFlipped !== null &&
-          this.state.secondCardFlipped !== null
-        ) {
-          this.updateMatchStatus([
-            this.state.firstCardFlipped,
-            this.state.secondCardFlipped
-          ]);
+        const { firstCardFlipped, secondCardFlipped } = this.state;
+        if (firstCardFlipped !== null && secondCardFlipped !== null) {
+          this.updateMatchStatus([firstCardFlipped, secondCardFlipped]);
         }
       }, 500);
     }
   };
+
   render() {
     const { gameSetup } = this.props;
     const { cards } = this.state;
@@ -91,9 +96,9 @@ class CardGameContainer extends Component {
     return (
       <div className={classNames.containerStyle}>
         <div className={classNames.divMarginSpacing}>
-          <button onClick={gameSetup} data-testid="New-Game">
+          <Button onClick={gameSetup} dataTestid="New-Game">
             New Game
-          </button>
+          </Button>
         </div>
         <div className={classNames.divWrapper}>
           {isGameOver ? (
@@ -104,8 +109,7 @@ class CardGameContainer extends Component {
                 id={index}
                 value={singleCard.value}
                 suit={singleCard.suit}
-                type={singleCard.value}
-                key={index}
+                key={singleCard.code}
                 flipped={singleCard.flipped}
                 matched={singleCard.matched}
                 image={singleCard.image}

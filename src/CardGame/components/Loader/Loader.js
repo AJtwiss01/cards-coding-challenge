@@ -1,6 +1,6 @@
 import React from "react";
 import { css } from "emotion";
-import "../styles/loader.css";
+import "./loader.css";
 
 const Loader = () => {
   return <div className={`loader ${classNames.loaderDiv}`} />;

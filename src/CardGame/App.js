@@ -1,9 +1,14 @@
 import React, { Component } from "react";
 import axios from "axios";
 
-import CardGameContainer from "./CardGameContainer";
-import Loader from "./components/Loader";
+import CardGameContainer from "./Containers/CardGameContainer";
+import Loader from "./Components/Loader/Loader";
 
+/**
+ *
+ * This component handles data fetching and pasing the list of cards to the game container.
+ *
+ */
 class App extends Component {
   state = {
     cards: [],
@@ -18,6 +23,13 @@ class App extends Component {
     this.setState({
       loading: true
     });
+
+    /**
+     *
+     * Creates a delay for user experience.
+     * There are great libraries for this, but I decided not to import for such a lightweight app.
+     *
+     */
     setTimeout(() => {
       axios
         .get(`https://deckofcardsapi.com/api/deck/new/draw/?count=52`)
@@ -35,6 +47,7 @@ class App extends Component {
 
   render() {
     const { cards, loading } = this.state;
+
     if (loading) {
       return <Loader />;
     }
