@@ -1,7 +1,7 @@
 import { render, cleanup, fireEvent } from "react-testing-library";
 import React from "react";
 import "jest-dom/extend-expect";
-import Button from "../Components/Button";
+import Button from "../components/Button";
 
 afterEach(cleanup);
 

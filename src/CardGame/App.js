@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 
 import CardGameContainer from "./Containers/CardGameContainer";
-import Loader from "./Components/Loader/Loader";
+import Loader from "./components/Loader/Loader";
 
 /**
  *

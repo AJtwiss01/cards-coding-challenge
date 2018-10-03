@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { css } from "emotion";
 
-import Card from "../Components/Card";
-import GameOver from "../Components/GameOver";
-import Button from "../Components/Button";
+import Card from "../components/Card";
+import GameOver from "../components/GameOver";
+import Button from "../components/Button";
 /**
  *
  * This component receives a list of cards and handles the all state in the app.
