@@ -13,9 +13,8 @@ const getCardPositionAltText = id => {
   return `This Card is located in column ${column} in row ${row}`;
 };
 
-const lockClickAfterCheckingMatch = matched => {
-  console.log(matched);
-};
+const lockCardsClick = matched => matched;
+
 const Card = ({
   id,
   value,
@@ -32,7 +31,7 @@ const Card = ({
   };
 
   const positionAltText = getCardPositionAltText(id);
-  const lockClick = lockClickAfterCheckingMatch(matched);
+  const lockCardClick = lockCardsClick(matched);
   return (
     <img
       onKeyPress={enhanceFunctionWithOnEnter(handleFlipClick)}
@@ -42,7 +41,7 @@ const Card = ({
       id={id}
       key={code}
       data-testid={`Card-${id}`}
-      onClick={lockClick ? e => e.preventDefault() : handleFlipClick}
+      onClick={lockCardClick ? e => e.preventDefault() : handleFlipClick}
       className={matched ? classNames.isHidden : classNames.isShowing}
       width="86px"
     />
