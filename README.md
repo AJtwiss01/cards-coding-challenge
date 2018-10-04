@@ -1,3 +1,9 @@
+# I Created the follow in challenge in create-reactapp 
+1. `git clone https://github.com/AJtwiss01/cards-coding-challenge.git`
+2. run `npm install`
+3. run app `npm run start`
+4. run test `npm run test`
+
 # cards-coding-challenge
 # Concentration Card Game
 
